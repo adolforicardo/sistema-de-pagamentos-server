@@ -1,12 +1,21 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import router from "./routes";
+import cors from 'cors';
+require('dotenv').config();
 
 const app = express();
 
-app.get("/", (request: Request, response: Response) => {
-  response.json({ message: "Hello World" });
-});
 
-const PORT = 4000;
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}))
+
+app.use(express.json())
+
+app.use(router);
+
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
