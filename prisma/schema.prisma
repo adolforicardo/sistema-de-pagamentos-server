@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id String @id @default(cuid())
+  nome String 
+  username String?
+  genero GENERO?
+  email String
+  data_nascimento DateTime?
+  pais String
+  senha String
+  criado_em DateTime @default(now()) 
+  Endereco Endereco?
+}
+
+model Endereco {
+  id String @id @default(cuid())
+  endereco_residencial String
+  linha_um_endereco String
+  linha_dois_endereco String
+  cod_posta String
+  cidade String
+  usuario_id String @unique
+  User Usuario @relation(fields: [usuario_id], references: [id])
+}
+
+enum GENERO {
+  MASCULINO
+  FEMININO
+}
