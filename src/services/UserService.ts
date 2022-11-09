@@ -1,5 +1,5 @@
 import { prisma } from "../config/prisma";
-import { CreateUser, LoginUser } from "../models/types";
+import { CreateUser, ErrorResponseLogin, LoginUser, ResponseLogin } from "../models/types";
 import bcrypt from 'bcrypt'
 
 
@@ -10,6 +10,14 @@ class UserService {
     
     async create({ email, nome, pais, senha }: CreateUser) : Promise<any> {
         // Validar dados
+
+        const userExist = await prisma.usuario.findFirst({
+            where: {
+                email
+            }
+        })
+
+        if (userExist) return { auth: false, msg: "O email já está sendo utilizado" }
 
         const senhaEncriptada = await bcrypt.hash(senha, 10)
         const user = await prisma.usuario.create({
@@ -27,7 +35,7 @@ class UserService {
         return { user, auth: true, msg: "Usuário criado com Sucesso" }
     }
 
-    async login ({ email, senha }: LoginUser) {
+    async login ({ email, senha }: LoginUser) : Promise<ResponseLogin| ErrorResponseLogin>{
         // Validar dados
         const user = await prisma.usuario.findFirst({
             where: {
@@ -42,11 +50,11 @@ class UserService {
         if (!senhaComparada) return { auth: false, msg: "Usuário/Senha incorrecta" }
 
 
-        return { 
-            usuario: { 
+        return {
+            user: {
                 nome: user.nome,
                 email: user.email,
-                pais: user.pais,
+                pais: user.pais
             },
             auth: true 
         }
