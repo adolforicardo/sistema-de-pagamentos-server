@@ -32,16 +32,24 @@ model Endereco {
   cod_posta            String
   cidade               String
   usuario_id           String  @unique
-  User                 Usuario @relation(fields: [usuario_id], references: [id])
+  Usuario              Usuario @relation(fields: [usuario_id], references: [id])
 }
 
 model Empresa {
-  id                  String @id @default(cuid())
+  id                  String        @id @default(cuid())
   endereco_comercial  String
   linha_um_endereco   String
-  linha_dois_endereco String
+  linha_dois_endereco String?
   cod_posta           String
   cidade              String
+  tipo_empresa        TipoDaEmpresa @relation(fields: [tipo_empresa_id], references: [id])
+  tipo_empresa_id     String        @unique
+}
+
+model TipoDaEmpresa {
+  id      String   @id @default(cuid())
+  nome    String
+  Empresa Empresa?
 }
 
 enum GENERO {
