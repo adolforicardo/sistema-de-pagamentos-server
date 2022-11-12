@@ -11,30 +11,46 @@ datasource db {
 }
 
 model Usuario {
-  id String @id @default(cuid())
-  nome String 
-  username String?
-  genero GENERO?
-  email String
+  id              String    @id @default(cuid())
+  nome            String
+  username        String?
+  genero          GENERO?
+  email           String
   data_nascimento DateTime?
-  pais String
-  senha String
-  criado_em DateTime @default(now()) 
-  Endereco Endereco?
+  pais            String
+  senha           String
+  criado_em       DateTime  @default(now())
+  Endereco        Endereco?
+  Role            ROLES     @default(ADMIN)
 }
 
 model Endereco {
-  id String @id @default(cuid())
+  id                   String  @id @default(cuid())
   endereco_residencial String
-  linha_um_endereco String
+  linha_um_endereco    String
+  linha_dois_endereco  String
+  cod_posta            String
+  cidade               String
+  usuario_id           String  @unique
+  User                 Usuario @relation(fields: [usuario_id], references: [id])
+}
+
+model Empresa {
+  id                  String @id @default(cuid())
+  endereco_comercial  String
+  linha_um_endereco   String
   linha_dois_endereco String
-  cod_posta String
-  cidade String
-  usuario_id String @unique
-  User Usuario @relation(fields: [usuario_id], references: [id])
+  cod_posta           String
+  cidade              String
 }
 
 enum GENERO {
   MASCULINO
   FEMININO
+}
+
+enum ROLES {
+  ADMIN
+  DEV
+  GESTOR
 }
