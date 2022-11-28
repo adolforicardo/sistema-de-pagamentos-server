@@ -86,11 +86,23 @@ model DetalhesDeExecucao {
 }
 
 model CodigoDeDiscagem {
-  id     String @id @default(cuid())
-  pais   String
-  codigo String
+  id                           String                        @id @default(cuid())
+  pais                         String
+  codigo                       String
+  DetalhesDeAtendimentoCliente DetalhesDeAtendimentoCliente?
 
   @@map("codigo_de_discagem")
+}
+
+model DetalhesDeAtendimentoCliente {
+  id                   String            @id @default(cuid())
+  descricao_extrato    String
+  descricao_curta      String
+  telefone_atendimento String
+  CodigoDeDiscagem     CodigoDeDiscagem? @relation(fields: [codigoDeDiscagemId], references: [id])
+  codigoDeDiscagemId   String?           @unique
+
+  @@map("detalhes_atendimento_cliente")
 }
 
 enum GENERO {
