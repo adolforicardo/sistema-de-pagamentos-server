@@ -85,6 +85,14 @@ model DetalhesDeExecucao {
   @@map("detalhes_da_execucao")
 }
 
+model CodigoDeDiscagem {
+  id     String @id @default(cuid())
+  pais   String
+  codigo String
+
+  @@map("codigo_de_discagem")
+}
+
 enum GENERO {
   MASCULINO
   FEMININO
