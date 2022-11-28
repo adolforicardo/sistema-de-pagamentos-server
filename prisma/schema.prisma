@@ -40,15 +40,16 @@ model Endereco {
 }
 
 model Empresa {
-  id                  String             @id @default(cuid())
+  id                  String              @id @default(cuid())
   endereco_comercial  String
   linha_um_endereco   String
   linha_dois_endereco String?
   cod_posta           String
   cidade              String
-  tipo_empresa        TipoDaEmpresa      @relation(fields: [tipo_empresa_id], references: [id])
-  tipo_empresa_id     String             @unique
+  tipo_empresa        TipoDaEmpresa       @relation(fields: [tipo_empresa_id], references: [id])
+  tipo_empresa_id     String              @unique
   DetalhesdaEmpresa   DetalhesdaEmpresa?
+  DetalhesDeExecuco   DetalhesDeExecucao?
 
   @@map("empresa")
 }
@@ -74,6 +75,16 @@ model DetalhesdaEmpresa {
   @@map("detalhes_da_empresa")
 }
 
+model DetalhesDeExecucao {
+  id                 String       @id @default(cuid())
+  vendas_mercadorias String
+  tempo_entrega      TIME_ENTREGA @default(DENTRO_DE_DUAS_SEMANAS)
+  Empresa            Empresa?     @relation(fields: [empresaId], references: [id])
+  empresaId          String?      @unique
+
+  @@map("detalhes_da_execucao")
+}
+
 enum GENERO {
   MASCULINO
   FEMININO
@@ -83,4 +94,11 @@ enum ROLES {
   ADMIN
   DEV
   GESTOR
+}
+
+enum TIME_ENTREGA {
+  DENTRO_DE_UM_DIA
+  DENTRO_DE_DUAS_SEMANAS
+  DENTRO_DE_UM_MES
+  MAIS_DE_UM_MES
 }
