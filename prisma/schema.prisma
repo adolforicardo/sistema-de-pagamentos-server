@@ -22,6 +22,8 @@ model Usuario {
   criado_em       DateTime  @default(now())
   Endereco        Endereco?
   Role            ROLES     @default(ADMIN)
+
+  @@map("user")
 }
 
 model Endereco {
@@ -33,17 +35,22 @@ model Endereco {
   cidade               String
   usuario_id           String  @unique
   Usuario              Usuario @relation(fields: [usuario_id], references: [id])
+
+  @@map("endereco")
 }
 
 model Empresa {
-  id                  String        @id @default(cuid())
+  id                  String             @id @default(cuid())
   endereco_comercial  String
   linha_um_endereco   String
   linha_dois_endereco String?
   cod_posta           String
   cidade              String
-  tipo_empresa        TipoDaEmpresa @relation(fields: [tipo_empresa_id], references: [id])
-  tipo_empresa_id     String        @unique
+  tipo_empresa        TipoDaEmpresa      @relation(fields: [tipo_empresa_id], references: [id])
+  tipo_empresa_id     String             @unique
+  DetalhesdaEmpresa   DetalhesdaEmpresa?
+
+  @@map("empresa")
 }
 
 model TipoDaEmpresa {
@@ -51,6 +58,20 @@ model TipoDaEmpresa {
   nome    String   @unique
   value   String?  @unique
   Empresa Empresa?
+
+  @@map("tipo_da_empresa")
+}
+
+model DetalhesdaEmpresa {
+  id        String   @id @default(cuid())
+  sector    String
+  site      String
+  num_iva   String
+  descricao String
+  Empresa   Empresa? @relation(fields: [empresaId], references: [id])
+  empresaId String?  @unique
+
+  @@map("detalhes_da_empresa")
 }
 
 enum GENERO {
