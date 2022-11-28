@@ -48,7 +48,7 @@ model Empresa {
 
 model TipoDaEmpresa {
   id      String   @id @default(cuid())
-  nome    String
+  nome    String   @unique
   Empresa Empresa?
 }
 
