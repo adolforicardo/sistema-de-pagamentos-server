@@ -49,6 +49,7 @@ model Empresa {
 model TipoDaEmpresa {
   id      String   @id @default(cuid())
   nome    String   @unique
+  value   String?  @unique
   Empresa Empresa?
 }
 
